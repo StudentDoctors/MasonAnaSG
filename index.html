@@ -10,6 +10,7 @@
 <style>
 :root{--ink:#14213d;--paper:#fbf8f1;--accent:#e4572e;--accent2:#1f6f78;--muted:#5b6475;--card:#ffffff}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:var(--paper);line-height:1.6}
 h1,h2,h3,.sans,nav,button,.btn{font-family:'Helvetica Neue',Arial,sans-serif}
@@ -130,7 +131,7 @@ footer a{color:#fff}
 <section class="vote" id="vote"><div class="wrap">
   <h2>Election day</h2>
   <div class="when" id="when"></div>
-  <p id="howto"></p>
+  <p id="howto" style="margin-bottom:0"></p>
   <a class="btn" style="background:#fff;color:var(--accent2);border-color:#fff" id="voteLink" href="#">Go to the ballot</a>
 </div></section>
 
@@ -141,11 +142,11 @@ footer a{color:#fff}
 <script>
 /* ===== EDIT THIS BLOCK — everything on the page comes from here ===== */
 const CONFIG = {
-  mason: { first: "Mason", last: "[Last name]", role: "Candidate for President",
-    bio: "Add Mason's bio here: year, program, student orgs, and why he's running.", photo: "" },
-  ana:   { first: "Ana",   last: "[Last name]", role: "Candidate for Vice President",
-    bio: "Add Ana's bio here: year, program, student orgs, and why she's running.", photo: "" },
-  school: "[Your school]",
+  mason: { first: "Mason", last: "", role: "Candidate for President",
+    bio: "Mason is running for Student Body President to make student government more open, responsive, and useful for every student.", photo: "" },
+  ana:   { first: "Ana",   last: "", role: "Candidate for Vice President",
+    bio: "Ana is running for Student Body Vice President to keep every promise on this page visible, tracked, and delivered.", photo: "" },
+  school: "SHSU College of Osteopathic Medicine",
   slogan: "Real listening. Real follow-through.",
   planks: [
     { title: "Be heard", text: "Open office hours and a simple feedback form, with every response answered within a week." },
@@ -155,7 +156,7 @@ const CONFIG = {
     { title: "Back student orgs", text: "Faster funding approvals and a shared calendar so events stop colliding." },
     { title: "Close the loop", text: "A mid-year town hall to report progress and reset priorities with you." }
   ],
-  election: { date: "[Election date]", howto: "Check your school email for the ballot link. Voting takes about two minutes.", link: "#" },
+  election: { date: "", howto: "Voting details will be posted here and sent by school email.", link: "#" },
   contactEmail: "",
   social: "",
   disclaimer: "Paid for by the Mason & Ana campaign."
@@ -170,10 +171,11 @@ $('slogan').textContent=C.slogan;
 $('people').innerHTML=[['mason',C.mason],['ana',C.ana]].map(([k,p])=>`
   <article class="card person ${k}">
     <div class="avatar">${p.photo?`<img src="${p.photo}" alt="${p.first} ${p.last}">`:p.first[0]}</div>
-    <h3>${p.first} ${p.last}</h3><div class="role">${p.role}</div><p>${p.bio}</p>
+    <h3>${(p.first+" "+p.last).trim()}</h3><div class="role">${p.role}</div><p>${p.bio}</p>
   </article>`).join('');
 $('planks').innerHTML=C.planks.map((p,i)=>`<div class="card"><div class="num">${String(i+1).padStart(2,'0')}</div><h3>${p.title}</h3><p>${p.text}</p></div>`).join('');
-$('when').textContent=C.election.date; $('howto').textContent=C.election.howto; $('voteLink').href=C.election.link;
+$('when').textContent=C.election.date; $('when').hidden=!C.election.date; $('howto').textContent=C.election.howto;
+if(C.election.link&&C.election.link!=='#'){$('voteLink').href=C.election.link}else{$('voteLink').hidden=true}
 $('social').textContent=C.social; $('paid').textContent=C.disclaimer;
 $('contactForm').addEventListener('submit',e=>{
   e.preventDefault();
